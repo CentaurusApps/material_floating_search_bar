@@ -24,6 +24,8 @@ class FloatingSearchAppBar extends ImplicitlyAnimatedWidget {
   /// The background color of the bar
   final Color? color;
 
+  final SystemUiOverlayStyle? systemOverlayStyle;
+
   /// The color of the bar when a [Scrollable]
   /// inside the [body] was scrolled (i.e. is not at the top)
   final Color? colorOnScroll;
@@ -143,6 +145,7 @@ class FloatingSearchAppBar extends ImplicitlyAnimatedWidget {
     required this.body,
     this.accentColor,
     this.color,
+    this.systemOverlayStyle,
     this.colorOnScroll,
     this.shadowColor,
     this.iconColor,
@@ -416,13 +419,14 @@ class FloatingSearchAppBarState extends ImplicitlyAnimatedWidgetState<
             : Brightness.dark);
 
     return AnnotatedRegion<SystemUiOverlayStyle>(
-      value: brightness == Brightness.dark
-          ? const SystemUiOverlayStyle(
-              statusBarBrightness: Brightness.light,
-              statusBarIconBrightness: Brightness.light)
-          : const SystemUiOverlayStyle(
-              statusBarBrightness: Brightness.dark,
-              statusBarIconBrightness: Brightness.dark),
+      value: widget.systemOverlayStyle ??
+          (brightness == Brightness.dark
+              ? const SystemUiOverlayStyle(
+                  statusBarBrightness: Brightness.light,
+                  statusBarIconBrightness: Brightness.light)
+              : const SystemUiOverlayStyle(
+                  statusBarBrightness: Brightness.dark,
+                  statusBarIconBrightness: Brightness.dark)),
       child: NotificationListener<ScrollNotification>(
         onNotification: (notification) {
           if (notification.metrics.axis != Axis.vertical) return false;
